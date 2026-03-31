@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepLog — AI Log Analytics</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">DeepLog</span>
+      </div>
+      <nav>
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">◈</span> Dashboard
+        </a>
+        <a href="#" class="nav-item" data-page="logs">
+          <span class="nav-icon">≡</span> Live Logs
+        </a>
+        <a href="#" class="nav-item" data-page="alerts">
+          <span class="nav-icon">⚠</span> Alerts
+          <span class="badge" id="alert-badge">0</span>
+        </a>
+        <a href="#" class="nav-item" data-page="ai">
+          <span class="nav-icon">◉</span> AI Analysis
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="connection-status" id="conn-status">
+          <span class="dot disconnected"></span> Connecting...
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+      <!-- Dashboard Page -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <h1>Dashboard</h1>
+          <span class="subtitle" id="last-updated">—</span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Logs (1h)</div>
+            <div class="stat-value" id="stat-total">—</div>
+          </div>
+          <div class="stat-card danger">
+            <div class="stat-label">Critical</div>
+            <div class="stat-value" id="stat-critical">—</div>
+          </div>
+          <div class="stat-card warning">
+            <div class="stat-label">Errors</div>
+            <div class="stat-value" id="stat-errors">—</div>
+          </div>
+          <div class="stat-card info">
+            <div class="stat-label">Active Alerts</div>
+            <div class="stat-value" id="stat-alerts">—</div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card wide">
+            <div class="chart-title">Log Activity (last 30 min)</div>
+            <canvas id="timeline-chart" height="90"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">By Level</div>
+            <canvas id="level-chart" height="180"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">By Service</div>
+            <canvas id="source-chart" height="180"></canvas>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-title">Top Suspicious IPs</div>
+          <table>
+            <thead>
+              <tr><th>IP Address</th><th>Anomalies</th><th>Risk</th></tr>
+            </thead>
+            <tbody id="ip-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Logs Page -->
+      <div class="page" id="page-logs">
+        <div class="page-header">
+          <h1>Live Logs</h1>
+          <div class="filters">
+            <select id="filter-level">
+              <option value="">All Levels</option>
+              <option value="INFO">INFO</option>
+              <option value="WARNING">WARNING</option>
+              <option value="ERROR">ERROR</option>
+              <option value="CRITICAL">CRITICAL</option>
+            </select>
+            <select id="filter-source">
+              <option value="">All Services</option>
+              <option value="auth-service">auth-service</option>
+              <option value="api-gateway">api-gateway</option>
+              <option value="payment-service">payment-service</option>
+              <option value="user-service">user-service</option>
+              <option value="product-service">product-service</option>
+              <option value="order-service">order-service</option>
+            </select>
+            <button class="btn" id="refresh-logs">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="log-stream" id="log-stream"></div>
+      </div>
+
+      <!-- Alerts Page -->
+      <div class="page" id="page-alerts">
+        <div class="page-header">
+          <h1>Security Alerts</h1>
+          <button class="btn btn-primary" id="run-scan">⬡ Run AI Scan</button>
+        </div>
+        <div id="alerts-list"></div>
+      </div>
+
+      <!-- AI Page -->
+      <div class="page" id="page-ai">
+        <div class="page-header">
+          <h1>AI Analysis</h1>
+          <button class="btn btn-primary" id="get-summary">◉ Analyze Now</button>
+        </div>
+        <div id="ai-output">
+          <div class="ai-placeholder">Click "Analyze Now" to get an AI health report of the last 5 minutes.</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
